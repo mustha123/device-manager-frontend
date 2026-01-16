@@ -59,7 +59,7 @@ const [loading, setLoading] = useState(false);
   
       if (res.data.success) {
         localStorage.setItem("adminToken", res.data.adminToken);
-        navigate("/admin/*");
+        navigate("/admin");
       } else {
         setErrorMsg(res.data.message || "Invalid email or password");
       }
