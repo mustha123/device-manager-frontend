@@ -4,17 +4,18 @@ import { useEffect } from "react";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../../../ContextProvider';
-import { useContext } from 'react';
+// import { UserContext } from '../../../ContextProvider';
+// import { useContext } from 'react';
 
 
 
 
 export default function AdminLogin() {
-  const context = useContext(UserContext);
-console.log("CONTEXT:", context);
+const host =
+  process.env.REACT_APP_API_URL ||
+  "https://device-management-backend-zbbp.onrender.com";
 
-const { host } = context || {};
+  console.log("API URL:", process.env.REACT_APP_API_URL);
 
   const navigate = useNavigate();
  useEffect(() => {

@@ -7,8 +7,8 @@ import { Box, styled } from '@mui/system';
 import { Button, Paper, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useContext } from 'react';
-import { UserContext } from '../../../ContextProvider';
+// import { useContext } from 'react';
+// import { UserContext } from '../../../ContextProvider';
 
 const VisuallyHiddenInput = styled('input')({
   position: 'absolute',
@@ -16,7 +16,9 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 export default function Addproduct() {
-const { host } = useContext(UserContext);
+const host =
+  process.env.REACT_APP_API_URL ||
+  "https://device-management-backend-zbbp.onrender.com";
   const[device,setDevice]=useState({
     dname:'',
     dtype:'',
