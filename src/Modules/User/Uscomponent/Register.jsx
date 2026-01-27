@@ -4,8 +4,10 @@ import TextField from '@mui/material/TextField'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import Border from '@mui/material/Box';
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../api';
+
 
 export default function Register() {
   const[reg,setReg]=useState({
@@ -23,8 +25,8 @@ export default function Register() {
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(reg);
-axios.post(
-  'http://localhost:5000/api/user/addregisteruser',
+api.post(
+  '/api/user/addregisteruser',
   reg
 )
 

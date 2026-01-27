@@ -1,7 +1,9 @@
 import { Margin } from '@mui/icons-material'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+// import axios from 'axios'
+import api from '../../../api';
+
 
 export default function Manageprofile() {
     const[profile,setProfile]=useState({
@@ -19,7 +21,7 @@ export default function Manageprofile() {
         const token=localStorage.getItem('UserToken')
         console.log('user token',token)
         if(token){
-            axios.get('http://localhost:5000/api/user/Getprofile',{headers:{"Authorization":token}})
+            api.get('/api/user/Getprofile',{headers:{"Authorization":token}})
         .then((res)=>{
         //   setProfile(res.data.user)
           const userdata=res.data.user;
@@ -41,7 +43,7 @@ export default function Manageprofile() {
     const handleprofileupdate=()=>{
         const token= localStorage.getItem('UserToken')
         console.log(token)
-            axios.put('http://localhost:5000/api/user/manageprofile',profile,{headers:{"Authorization":token}})
+            api.put('/api/user/manageprofile',profile,{headers:{"Authorization":token}})
             .then((res)=>{
             alert(res.data.message);
             setProfile(res.data.user) 

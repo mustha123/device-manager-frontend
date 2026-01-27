@@ -1,11 +1,12 @@
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import api from '../../../api';
 
 export default function Viewuser() {
      const[allusers,setAllusers]=useState([]);
@@ -14,7 +15,7 @@ export default function Viewuser() {
   },[])
   const fetchusers=async()=>{
     try {
-      const response=await axios.get('http://localhost:5000/api/user/getuser')
+      const response=await api.get('/api/user/getuser')
       setAllusers(response.data.getusers)
       console.log("All Users",response.data)
     } catch (error) {
@@ -24,7 +25,7 @@ export default function Viewuser() {
 
   const handleDelete=(mid)=>{
 console.log('user_id'+mid);
-axios.delete(`http://localhost:5000/api/user/deleteuser/${mid}`)
+api.delete(`/api/user/deleteuser/${mid}`)
 .then(()=>{
 alert('user deleted successfully')
 fetchusers();

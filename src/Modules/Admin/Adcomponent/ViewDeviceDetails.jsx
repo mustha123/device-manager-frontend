@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+// import axios from 'axios'
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useNavigate } from 'react-router-dom';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
+
 
 export default function ViewDeviceDetails() {
   const [view,setView]=useState([])
@@ -15,8 +19,8 @@ export default function ViewDeviceDetails() {
 const navigate=useNavigate();
 const fetchusers = async () => {
   try {
-    const response = await axios.get(
-      "http://localhost:5000/api/device/getdevice"
+    const response = await api.get(
+      "/api/device/getdevice"
     );
 
     setView(response.data.getproducts);
@@ -33,8 +37,8 @@ const fetchusers = async () => {
 const [deviceStatus, setDeviceStatus] = useState({});
 
 const fetchDeviceStatus = async (deviceId) => {
-  const res = await axios.get(
-    `http://localhost:5000/api/order/device-status/${deviceId}`
+  const res = await api.get(
+    `/api/order/device-status/${deviceId}`
   );
 
   setDeviceStatus(prev => ({
@@ -45,7 +49,7 @@ const fetchDeviceStatus = async (deviceId) => {
 
 const handleDelete=(cid)=>{
   console.log('device_id'+cid)
-  axios.delete(`http://localhost:5000/api/device/deleteitem/${cid}`)
+  api.delete(`/api/device/deleteitem/${cid}`)
   .then(()=>{
     alert('Item deleted successfully')
     fetchusers();
@@ -108,7 +112,7 @@ const handleDelete=(cid)=>{
 
   <TableCell align="center">
     <img
-      src={`http://localhost:5000/uploads/${prod.device_image}`}
+      src={`${API_URL}/uploads/${prod.device_image}`}
       alt="device"
       style={{ width: 80, borderRadius: 5 }}
     />

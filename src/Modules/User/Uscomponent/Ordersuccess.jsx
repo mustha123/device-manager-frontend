@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import {
   Card,
   CardContent,
@@ -15,6 +15,10 @@ import {
   DialogContentText,
   DialogActions
 } from "@mui/material";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
+
 
 
 export default function OrderSuccess() {
@@ -43,8 +47,8 @@ const [selectedDeviceId, setSelectedDeviceId] = useState(null);
     return;
   }
 
-  await axios.put(
-    `http://localhost:5000/api/order/cancel-item/${order._id}/${deviceId}`,
+  await api.put(
+    `/api/order/cancel-item/${order._id}/${deviceId}`,
     {},
     {
       headers: {
@@ -109,7 +113,7 @@ const [selectedDeviceId, setSelectedDeviceId] = useState(null);
   >
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <img
-        src={`http://localhost:5000/uploads/${item.deviceId.device_image}`}
+        src={`${API_URL}/uploads/${item.deviceId.device_image}`}
         alt={item.deviceId.device_name}
         style={{
           width: "60px",

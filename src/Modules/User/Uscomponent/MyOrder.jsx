@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -12,6 +12,10 @@ import {
   Chip,
   Stack
 } from "@mui/material";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
+
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
@@ -22,8 +26,8 @@ export default function MyOrders() {
   const navigate = useNavigate();
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/order/myorders",
+      const res = await api.get(
+        "/api/order/myorders",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
@@ -82,7 +86,7 @@ onClick={() =>
               {/* PRODUCT IMAGE */}
               <CardMedia
                 component="img"
-                image={`http://localhost:5000/uploads/${item.deviceId.device_image}`}
+                image={`${API_URL}/uploads/${item.deviceId.device_image}`}
                 alt={item.deviceId.device_name}
                 sx={{
                   width: 90,

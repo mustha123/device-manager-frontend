@@ -1,7 +1,8 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Table, TableBody, TableCell, TableRow, Button } from "@mui/material";
+import api from '../../../api';
 
 export default function ViewOrders() {
   const [orders, setOrders] = useState([]);
@@ -11,13 +12,13 @@ export default function ViewOrders() {
   }, []);
 
   const fetchOrders = async () => {
-    const res = await axios.get("http://localhost:5000/api/order/getgetorderdevicebyid");
+    const res = await api.get("/api/order/getgetorderdevicebyid");
     setOrders(res.data.orders);
   };
 
   const updateStatus = async (id, status) => {
-    await axios.put(
-      `http://localhost:5000/api/order/update-item-status/${id}`,
+    await api.put(
+      `/api/order/update-item-status/${id}`,
       { status }
     );
     fetchOrders();

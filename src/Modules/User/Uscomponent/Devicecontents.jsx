@@ -6,7 +6,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
 
 export default function Devicecontents() {
   const navigate = useNavigate();
@@ -16,15 +19,14 @@ export default function Devicecontents() {
     fetchusers();
   },[]);
 
-  const fetchusers=async()=>{
-    try {
-      const response=await axios.get('http://localhost:5000/api/device/getdevice');
-      setproducts(response.data.getproducts);
-      console.log("device fetched",response.data.getproducts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const fetchusers = async () => {
+  try {
+    const response = await api.get('/api/device/getdevice');
+    setproducts(response.data.getproducts);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   // 📌 Add To Cart Handler
   const handleAddToCart = (prod) => {
@@ -55,10 +57,11 @@ onClick={() => navigate(`/contentsdetails/${prod._id}`, { state: prod })}
 >
 
             <CardMedia
-              sx={{ height: 140 }}
-              image={`http://localhost:5000/uploads/${prod.device_image}`}
-              title={prod.device_name}
-            />
+  sx={{ height: 140 }}
+  image={`${API_URL}/uploads/${prod.device_image}`}
+  title={prod.device_name}
+/>
+
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {prod.device_type}<br/>

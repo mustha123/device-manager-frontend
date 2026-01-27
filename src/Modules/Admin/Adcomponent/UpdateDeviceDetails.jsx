@@ -1,5 +1,5 @@
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
-import axios from 'axios';
+// import axios from 'axios';
 import { useEffect, useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,6 +8,8 @@ import Select from '@mui/material/Select';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
+import api from '../../../api';
+
 
 const VisuallyHiddenInput = styled('input')({
   position: 'absolute',
@@ -28,7 +30,7 @@ export default function UpdateDeviceDetails() {
    })
     const [imagefile,setImagefile]=useState([])
   useEffect(() => {
-  axios.get(`http://localhost:5000/api/device/getdevicebyid/${pid}`)
+  api.get(`/api/device/getdevicebyid/${pid}`)
     .then((res) => {
       const data = res.data.oneproduct;
       setUpdate({
@@ -62,8 +64,8 @@ const handleChange = (e) => {
     formData.append("dimage", imagefile);
   }
 
-  axios.put(
-    `http://localhost:5000/api/device/updateitem/${pid}`,
+  api.put(
+    `/api/device/updateitem/${pid}`,
     formData,
     {
       headers: {

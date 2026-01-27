@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 // import { useContext } from 'react';
 // import { UserContext } from '../../../ContextProvider';
+import api from '../../../api';
+
 
 const VisuallyHiddenInput = styled('input')({
   position: 'absolute',
@@ -59,7 +61,7 @@ const host =
   data.append('ddate', device.ddate);
   data.append('dprice', device.dprice);
 
-  axios.post(`${host}/api/device/Adddevice`, data, {
+  axios.post('/api/device/Adddevice', data, {
     headers: { "Content-Type": "multipart/form-data" }
   })
   .then(() => alert("Product added successfully"))

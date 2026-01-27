@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import { UserContext } from '../../../ContextProvider';
 // import { useContext } from 'react';
+import api from '../../../api';
 
 
 
@@ -52,8 +53,8 @@ const [loading, setLoading] = useState(false);
     try {
       setLoading(true);
   
-      const res = await axios.post(
-        `${host}/api/admin/adminlogin`,
+      const res = await api.post(
+        '/api/admin/adminlogin',
         formData
       );
       console.log("HOST:", host);

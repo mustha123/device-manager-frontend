@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import {
   Grid,
   Card,
@@ -14,6 +14,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { UserContext } from '../../../ContextProvider';
 import { useContext } from 'react';
+import api from '../../../api';
 
 
 export default function Dashboard() {
@@ -25,8 +26,8 @@ export default function Dashboard() {
   }, []);
 
   const fetchStats = async () => {
-    const res = await axios.get(
-      `${host}/api/order/admin/dashboar`
+    const res = await api.get(
+      '/api/order/admin/dashboard'
     );
     setStats(res.data);
   };

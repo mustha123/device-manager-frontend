@@ -1,6 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
+
 import {
   Card,
   Typography,
@@ -21,8 +25,8 @@ export default function MyOrderDetails() {
 
   const fetchOrder = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/order/orderdetails/${orderId}`,
+      const res = await api.get(
+        `/api/order/orderdetails/${orderId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
@@ -64,7 +68,7 @@ export default function MyOrderDetails() {
             {/* PRODUCT IMAGE */}
             <CardMedia
               component="img"
-              image={`http://localhost:5000/uploads/${item.deviceId.device_image}`}
+              image={`${API_URL}/uploads/${item.deviceId.device_image}`}
               alt={item.deviceId.device_name}
               sx={{
                 width: 120,

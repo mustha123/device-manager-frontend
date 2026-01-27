@@ -4,7 +4,11 @@ import {
   TableHead, TableRow, Typography,
   Select, MenuItem, Paper
 } from "@mui/material";
-import axios from "axios";
+// import axios from "axios";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
+
 
 export default function ManageDeliveryStatus() {
   const [orders, setOrders] = useState([]);
@@ -15,8 +19,8 @@ export default function ManageDeliveryStatus() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/order/admin-orders"
+      const res = await api.get(
+        "/api/order/admin-orders"
       );
       setOrders(res.data.orders);
     } catch (err) {
@@ -26,8 +30,8 @@ export default function ManageDeliveryStatus() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/order/update-status/${orderId}`,
+      await api.put(
+        `/api/order/update-status/${orderId}`,
         { deliveryStatus: newStatus }
       );
 
@@ -82,7 +86,7 @@ export default function ManageDeliveryStatus() {
 
         <TableCell>
           <img
-            src={`http://localhost:5000/uploads/${item.deviceId.device_image}`}
+            src={`${API_URL}/uploads/${item.deviceId.device_image}`}
             width={70}
             style={{ borderRadius: 6 }}
             alt="product"
@@ -98,8 +102,8 @@ export default function ManageDeliveryStatus() {
             onChange={async (e) => {
               const newStatus = e.target.value;
 
-              await axios.put(
-                `http://localhost:5000/api/order/admin/update-delivery-status/${order._id}/${item._id}`,
+              await api.put(
+                `/api/order/admin/update-delivery-status/${order._id}/${item._id}`,
                 { shippingStatus: newStatus }
               );
 
