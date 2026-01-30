@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from '../../../api';
+import { API_URL } from "../../../config";
+
 import {
   Card,
   CardContent,
@@ -27,8 +30,8 @@ export default function Carts() {
   }, []);
 
   const fetchCart = () => {
-  axios
-    .get("http://localhost:5000/api/cart/get", {
+  api
+    .get("/api/cart/get", {
       headers: {
 Authorization: localStorage.getItem("UserToken")
       },
@@ -38,9 +41,9 @@ Authorization: localStorage.getItem("UserToken")
 };
 
   const updateQty = (productId, quantity) => {
-    axios
+    api
       .put(
-        "http://localhost:5000/api/cart/update",
+        "/api/cart/update",
         { productId, quantity },
         {
          headers: {
@@ -53,8 +56,8 @@ Authorization: localStorage.getItem("UserToken")
   };
 
   const deleteItem = (productId) => {
-    axios
-      .delete(`http://localhost:5000/api/cart/delete/${productId}`, {
+    api
+      .delete(`/api/cart/delete/${productId}`, {
        headers: {
 Authorization: localStorage.getItem("UserToken")
 }
@@ -89,7 +92,7 @@ Authorization: localStorage.getItem("UserToken")
               <CardMedia
                 component="img"
                 sx={{ width: 100, height: 100, borderRadius: 2 }}
-                image={`http://localhost:5000/uploads/${item.productId.device_image}`}
+                image={`${API_URL}/uploads/${item.productId.device_image}`}
                 alt={item.productId.device_name}
               />
 
