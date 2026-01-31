@@ -23,7 +23,7 @@ export default function Devicecontents() {
   try {
     const response = await api.get('/api/device/getdevice');
     console.log("API:", response.data);   
-    setproducts(response.data.getproducts);
+setproducts(response.data.getproducts || []);
   } catch (error) {
     console.log(error);
   }
@@ -50,7 +50,7 @@ export default function Devicecontents() {
           padding: "20px",
         }}
       >
-        {products?.map((prod) => (
+{products?.length > 0 && products.map((prod) => (
          <Card
       sx={{ maxWidth: 345, cursor: "pointer" }}
       key={prod._id}
