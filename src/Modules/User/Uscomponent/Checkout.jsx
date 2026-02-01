@@ -1,6 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from '../../../api';
+
 import { useState } from "react";
 import {
   Card,
@@ -38,8 +40,8 @@ const navigate = useNavigate();
   }
 
   try {
-    const res = await axios.post(
-      "http://localhost:5000/api/order/create",
+    const res = await api.post(
+      "/api/order/create",
       {
         customer: {
           fullName: details.fullName,

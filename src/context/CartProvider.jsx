@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from '../api';
+
 import CartContext from "./CartContext";
 
 const CartProvider = ({ children }) => {
@@ -8,8 +10,8 @@ const CartProvider = ({ children }) => {
   const token = localStorage.getItem("UserToken");
 
   const fetchCart = () => {
-    return axios
-      .get("http://localhost:5000/api/cart/get", {
+    return api
+      .get("/api/cart/get", {
         headers: { Authorization: token },
       })
       .then((res) => setCart(res.data.cart))
@@ -17,9 +19,9 @@ const CartProvider = ({ children }) => {
   };
 
   const updateQty = (productId, quantity) => {
-    return axios
+    return api
       .put(
-        "http://localhost:5000/api/cart/update",
+        "/api/cart/update",
         { productId, quantity },
         { headers: { Authorization: token } }
       )
@@ -27,9 +29,9 @@ const CartProvider = ({ children }) => {
   };
 
   const deleteItem = (productId) => {
-    return axios
+    return api
       .delete(
-        `http://localhost:5000/api/cart/delete/${productId}`,
+        `/api/cart/delete/${productId}`,
         { headers: { Authorization: token } }
       )
       .then(fetchCart);
