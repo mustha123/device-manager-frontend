@@ -15,7 +15,6 @@ import Avatar1 from '../../../Assets/avatar.jpg';
 import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-
 export default function Header() {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -24,14 +23,8 @@ export default function Header() {
   const navigate = useNavigate();
   const isLoggedIn = Boolean(localStorage.getItem("token"));
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
   const handleCloseNavMenu = () => setAnchorElNav(null);
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
@@ -42,92 +35,116 @@ export default function Header() {
   };
 
   const pages = [
-    // { title: "Home", path: "/" },
-    // { title: "About", path: "/about" },
-    // { title: "Contact", path: "/contact" },
-    // { title: "Shop", path: "/shop" },
+    { title: "Home", path: "/" },
+    { title: "About", path: "/about" },
+    { title: "Contact", path: "/contact" },
+    { title: "Shop", path: "/devicecontents" },
   ];
-
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#020d16cf", py: 2 }}>
-  <Container maxWidth="xl">
-    <Toolbar disableGutters sx={{ display: "flex" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ display: "flex" }}>
 
-      {/* 🔹 LEFT: Logo */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Avatar alt="Device Logo" src={Avatar1} />
-        <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-          DEVICE MANAGEMENT
-        </Typography>
-      </Box>
+          {/* 🔹 LEFT: Logo */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar alt="Device Logo" src={Avatar1} />
+            <Typography
+              variant="h6"
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+                fontSize: { xs: "14px", sm: "18px" } // 📱 Mobile view
+              }}
+            >
+              DEVICE MANAGEMENT
+            </Typography>
+          </Box>
 
-      {/* 🔹 CENTER: Navigation */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          gap: 3
-        }}
-      >
-        <Button component={Link} to="/" sx={{ color: "white" }}>
-          Home
-        </Button>
-        <Button component={Link} to="/about" sx={{ color: "white" }}>
-          About
-        </Button>
-        <Button component={Link} to="/contact" sx={{ color: "white" }}>
-          Contact
-        </Button>
-        <Button component={Link} to="/devicecontents" sx={{ color: "white" }}>
-          Shop
-        </Button>
-      </Box>
+          {/* 🔹 MOBILE MENU ICON */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, ml: 'auto' }}> {/* 📱 Mobile view */}
+            <IconButton onClick={handleOpenNavMenu} sx={{ color: "white" }}>
+              <MenuIcon />
+            </IconButton>
+          </Box>
 
-      {/* 🔹 RIGHT: Orders + Cart + User */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Menu
+            anchorEl={anchorElNav}
+            open={Boolean(anchorElNav)}
+            onClose={handleCloseNavMenu}
+          >
+            {pages.map((page) => (
+              <MenuItem
+                key={page.title}
+                onClick={() => {
+                  navigate(page.path);
+                  handleCloseNavMenu();
+                }}
+              >
+                {page.title}
+              </MenuItem>
+            ))}
+          </Menu>
 
-        <Button
-          component={Link}
-          to="/myorders"
-          sx={{ color: "white" }}
-        >
-          My Orders
-        </Button>
+          {/* 🔹 DESKTOP NAVIGATION */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" }, // 📱 Mobile view
+              justifyContent: "center",
+              gap: 3
+            }}
+          >
+            {pages.map((page) => (
+              <Button key={page.title} component={Link} to={page.path} sx={{ color: "white" }}>
+                {page.title}
+              </Button>
+            ))}
+          </Box>
 
-        <IconButton component={Link} to="/carts">
-          <ShoppingCartIcon sx={{ fontSize: 30, color: "white" }} />
-        </IconButton>
+          {/* 🔹 RIGHT SIDE */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 2 } }}> {/* 📱 Mobile view */}
 
-        {/* User Avatar */}
-        <Tooltip title="Account Menu">
-          <IconButton onClick={handleOpenUserMenu}>
-            <Avatar />
-          </IconButton>
-        </Tooltip>
+            <Button
+              component={Link}
+              to="/myorders"
+              sx={{
+                color: "white",
+                display: { xs: "none", sm: "inline-flex" } // 📱 Mobile view
+              }}
+            >
+              My Orders
+            </Button>
 
-        <Menu
-          anchorEl={anchorElUser}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
-        >
-          {!isLoggedIn ? (
-            <MenuItem onClick={() => navigate("/login")}>
-              Login
-            </MenuItem>
-          ) : (
-            <MenuItem onClick={handleLogout}>
-              <Typography color="error">Logout</Typography>
-            </MenuItem>
-          )}
-        </Menu>
+            <IconButton component={Link} to="/carts">
+              <ShoppingCartIcon sx={{ fontSize: { xs: 24, sm: 30 }, color: "white" }} /> {/* 📱 Mobile view */}
+            </IconButton>
 
-      </Box>
+            <Tooltip title="Account Menu">
+              <IconButton onClick={handleOpenUserMenu}>
+                <Avatar sx={{ width: { xs: 28, sm: 32 }, height: { xs: 28, sm: 32 } }} /> {/* 📱 Mobile view */}
+              </IconButton>
+            </Tooltip>
 
-    </Toolbar>
-  </Container>
-</AppBar>
+            <Menu
+              anchorEl={anchorElUser}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {!isLoggedIn ? (
+                <MenuItem onClick={() => navigate("/login")}>
+                  Login
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleLogout}>
+                  <Typography color="error">Logout</Typography>
+                </MenuItem>
+              )}
+            </Menu>
+          </Box>
 
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }

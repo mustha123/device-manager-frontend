@@ -1,37 +1,22 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-// import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { UserContext } from '../../../ContextProvider';
-// import { useContext } from 'react';
 import api from '../../../api';
 
-
-
-
 export default function AdminLogin() {
-const host =
-  process.env.REACT_APP_API_URL ||
-  "https://device-management-backend-zbbp.onrender.com";
-
-  console.log("API URL:", process.env.REACT_APP_API_URL);
 
   const navigate = useNavigate();
- useEffect(() => {
-  const token = localStorage.getItem("adminToken");
-  if (token) {
-    // navigate("/admin/*", { replace: true });
-  }
-}, [navigate]);
 
-
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (token) {
+      // navigate("/admin", { replace: true });
+    }
+  }, [navigate]);
 
   const [errorMsg, setErrorMsg] = useState("");
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -44,51 +29,45 @@ const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-  
+
     if (!formData.email || !formData.password) {
       setErrorMsg("Please enter email and password");
       return;
     }
-  
+
     try {
       setLoading(true);
-  
-      const res = await api.post(
-        '/api/admin/adminlogin',
-        formData
-      );
-      console.log("HOST:", host);
-  
+      const res = await api.post('/api/admin/adminlogin', formData);
+
       if (res.data.success) {
         localStorage.setItem("adminToken", res.data.adminToken);
         navigate("/admin");
       } else {
         setErrorMsg(res.data.message || "Invalid email or password");
       }
-    } catch (error) {
+    } catch {
       setErrorMsg("Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
-    
     <Box
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         background: "linear-gradient(135deg, #e8ebef31, #7f7378ff)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        px: 2 // 📱 Mobile view
       }}
     >
       <Paper
         elevation={5}
         sx={{
-          width: 380,
-          p: 4,
+          width: { xs: "100%", sm: 380 }, // 📱 Mobile view
+          p: { xs: 3, sm: 4 }, // 📱 Mobile view
           borderRadius: 4,
           backdropFilter: "blur(10px)",
           backgroundColor: "rgba(236, 63, 89, 0.15)",
@@ -96,21 +75,20 @@ const [loading, setLoading] = useState(false);
         }}
       >
         {errorMsg && (
-  <Typography
-    color="error"
-    align="center"
-    mb={2}
-    fontWeight="bold"
-  >
-    {errorMsg}
-  </Typography>
-)}
+          <Typography color="error" align="center" mb={2} fontWeight="bold">
+            {errorMsg}
+          </Typography>
+        )}
 
         <Typography
           variant="h4"
           mb={3}
           align="center"
-          sx={{ fontWeight: "bold", color: "#e157edff" }}
+          sx={{
+            fontWeight: "bold",
+            color: "#e157edff",
+            fontSize: { xs: "22px", sm: "32px" } // 📱 Mobile view
+          }}
         >
           Admin Login
         </Typography>
@@ -122,8 +100,9 @@ const [loading, setLoading] = useState(false);
             fullWidth
             name="email"
             margin="normal"
-            autoComplete='off'
+            autoComplete="off"
             onChange={handleChange}
+            size="small" // 📱 Mobile view
             sx={{
               input: { color: "#fff" },
               label: { color: "#cfd3db" },
@@ -139,33 +118,33 @@ const [loading, setLoading] = useState(false);
             autoComplete="new-password"
             margin="normal"
             onChange={handleChange}
+            size="small" // 📱 Mobile view
             sx={{
               input: { color: "#fff" },
               label: { color: "#cfd3db" },
             }}
           />
 
-<Button
-  variant="contained"
-  type="submit"
-  fullWidth
-  disabled={loading}
-  sx={{
-    mt: 3,
-    py: 1.2,
-    fontSize: "16px",
-    fontWeight: "bold",
-    borderRadius: "30px",
-    transition: "0.3s",
-    "&:hover": {
-      backgroundColor: "#0b080dff",
-      transform: "scale(1.05)",
-    },
-  }}
->
-  {loading ? "Logging in..." : "Login"}
-</Button>
-
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            disabled={loading}
+            sx={{
+              mt: 3,
+              height: { xs: 45, sm: 40 }, // 📱 Mobile view
+              fontSize: { xs: "16px", sm: "14px" }, // 📱 Mobile view
+              fontWeight: "bold",
+              borderRadius: "30px",
+              transition: "0.3s",
+              "&:hover": {
+                backgroundColor: "#0b080dff",
+                transform: "scale(1.05)",
+              },
+            }}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </Button>
         </form>
       </Paper>
     </Box>

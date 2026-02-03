@@ -1,7 +1,8 @@
-import React from 'react'
-import { useEffect, useState } from "react";
-// import axios from "axios";
-import { Table, TableBody, TableCell, TableRow, Button } from "@mui/material";
+import React, { useEffect, useState } from 'react'
+import {
+  Table, TableBody, TableCell, TableRow,
+  Button, Typography, TableContainer, Paper, Box
+} from "@mui/material";
 import api from '../../../api';
 
 export default function ViewOrders() {
@@ -17,38 +18,58 @@ export default function ViewOrders() {
   };
 
   const updateStatus = async (id, status) => {
-    await api.put(
-      `/api/order/update-item-status/${id}`,
-      { status }
-    );
+    await api.put(`/api/order/update-item-status/${id}`, { status });
     fetchOrders();
   };
 
   return (
-    <Table>
-      <TableBody>
-        {orders.map((order, index) => (
-          <TableRow key={order._id}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{order.orderStatus}</TableCell>
+    <Box sx={{ px: { xs: 1, sm: 3 }, mt: 2 }}> {/* 📱 Mobile view */}
+      <Typography
+        variant="h5"
+        mb={2}
+        sx={{ fontSize: { xs: "20px", sm: "26px" } }} // 📱 Mobile view
+      >
+        View Orders
+      </Typography>
 
-            <TableCell>
-              {order.orderStatus !== "Delivered" && (
-                <Button onClick={() => updateStatus(order._id, "Shipped")}>
-                  Ship
-                </Button>
-              )}
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "100%",
+          overflowX: "auto", // 📱 Mobile view
+        }}
+      >
+        <Table sx={{ minWidth: 500 }}> {/* 📱 Mobile view */}
+          <TableBody>
+            {orders.map((order, index) => (
+              <TableRow key={order._id}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{order.orderStatus}</TableCell>
 
-              {order.orderStatus === "Shipped" && (
-                <Button onClick={() => updateStatus(order._id, "Delivered")}>
-                  Deliver
-                </Button>
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                <TableCell>
+                  {order.orderStatus !== "Delivered" && (
+                    <Button
+                      size="small" // 📱 Mobile view
+                      onClick={() => updateStatus(order._id, "Shipped")}
+                    >
+                      Ship
+                    </Button>
+                  )}
+
+                  {order.orderStatus === "Shipped" && (
+                    <Button
+                      size="small"
+                      onClick={() => updateStatus(order._id, "Delivered")}
+                    >
+                      Deliver
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
-

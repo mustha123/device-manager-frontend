@@ -1,8 +1,5 @@
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-// import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from '../../../api';
-
 import { useState } from "react";
 import {
   Card,
@@ -19,8 +16,7 @@ import {
 export default function Checkout() {
   const { state } = useLocation();
   const cart = state?.cart;
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [details, setDetails] = useState({
     fullName: "",
@@ -34,58 +30,67 @@ const navigate = useNavigate();
   };
 
   const handlePayment = async () => {
-  if (!details.fullName || !details.mobile || !details.address) {
-    alert("Please fill all details");
-    return;
-  }
+    if (!details.fullName || !details.mobile || !details.address) {
+      alert("Please fill all details");
+      return;
+    }
 
-  try {
-    const res = await api.post(
-      "/api/order/create",
-      {
-        customer: {
-          fullName: details.fullName,
-          mobile: details.mobile,
-          address: details.address,
+    try {
+      const res = await api.post(
+        "/api/order/create",
+        {
+          customer: {
+            fullName: details.fullName,
+            mobile: details.mobile,
+            address: details.address,
+          },
+          items: cart.items,
+          total: cart.totalPrice,
         },
-        items: cart.items,
-        total: cart.totalPrice,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
-        },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
+          },
+        }
+      );
 
-    navigate("/ordersuccess", { state: res.data.order });
-  } catch (error) {
-    console.error("Order error:", error.response?.data);
-    alert("Order failed");
+      navigate("/ordersuccess", { state: res.data.order });
+    } catch (error) {
+      console.error("Order error:", error.response?.data);
+      alert("Order failed");
+    }
+  };
+
+  if (!cart || !cart.items || cart.items.length === 0) {
+    alert("Cart is empty");
+    return null;
   }
-};
-
-
-
-if (!cart || !cart.items || cart.items.length === 0) {
-  alert("Cart is empty");
-  return;
-}
 
   return (
-    <Card sx={{ maxWidth: 550, margin: "20px auto", padding: "20px" }}>
+    <Card
+      sx={{
+        maxWidth: 550,
+        margin: "20px auto",
+        padding: { xs: "15px", sm: "20px" }, // 📱 Mobile view
+        borderRadius: 3, // 📱 Mobile view
+      }}
+    >
       <CardContent>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ fontSize: { xs: "22px", sm: "32px" } }} // 📱 Mobile view
+        >
           Checkout
         </Typography>
 
-        {/* Total Summary */}
-        <Typography variant="h6">Total Items: {cart.items.length}</Typography>
+        <Typography variant="h6">
+          Total Items: {cart.items.length}
+        </Typography>
         <Typography variant="h6" mt={1}>
           Total Price: ₹{cart.totalPrice}
         </Typography>
 
-        {/* User Info Form */}
         <Box mt={3}>
           <TextField
             label="Full Name"
@@ -94,6 +99,7 @@ if (!cart || !cart.items || cart.items.length === 0) {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            size="small" // 📱 Mobile view
           />
 
           <TextField
@@ -103,6 +109,7 @@ if (!cart || !cart.items || cart.items.length === 0) {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            size="small" // 📱 Mobile view
             inputProps={{ maxLength: 10 }}
           />
 
@@ -115,11 +122,10 @@ if (!cart || !cart.items || cart.items.length === 0) {
             margin="normal"
             multiline
             rows={3}
+            size="small" // 📱 Mobile view
           />
-          
         </Box>
 
-        {/* Payment Options */}
         <Typography variant="h6" mt={3}>
           Select Payment Method:
         </Typography>
@@ -129,35 +135,35 @@ if (!cart || !cart.items || cart.items.length === 0) {
           value={details.paymentMethod}
           onChange={handleChange}
         >
-          <FormControlLabel
-            value="cod"
-            control={<Radio />}
-            label="Cash on Delivery (COD)"
-          />
-          <FormControlLabel
-            value="upi"
-            control={<Radio />}
-            label="Scan & Pay (UPI)"
-          />
+          <FormControlLabel value="cod" control={<Radio />} label="Cash on Delivery (COD)" />
+          <FormControlLabel value="upi" control={<Radio />} label="Scan & Pay (UPI)" />
         </RadioGroup>
 
-        {/* If UPI show QR */}
         {details.paymentMethod === "upi" && (
           <Box mt={2} textAlign="center">
             <Typography>Scan QR to Pay</Typography>
             <img
               src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi:example@upi"
               alt="UPI QR"
-              style={{ width: "200px", height: "200px", marginTop: "10px" }}
+              style={{
+                width: "200px",
+                height: "200px",
+                marginTop: "10px",
+                maxWidth: "100%", // 📱 Mobile view
+              }}
             />
           </Box>
         )}
 
-        {/* Submit Button */}
         <Button
           variant="contained"
           color="primary"
-          sx={{ mt: 3 }}
+          sx={{
+            mt: 3,
+            height: { xs: 48, sm: "auto" }, // 📱 Mobile view
+            fontSize: { xs: "16px", sm: "14px" }, // 📱 Mobile view
+            borderRadius: 2, // 📱 Mobile view
+          }}
           fullWidth
           onClick={handlePayment}
         >

@@ -1,78 +1,64 @@
 import { useLocation, useNavigate } from "react-router-dom";
-// import axios from "axios";
 import {
   Card,
   CardContent,
   Typography,
   Button,
-  Box
-} from "@mui/material";
-import { useState } from "react";
-import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions
 } from "@mui/material";
+import { useState } from "react";
 import api from '../../../api';
 import { API_URL } from "../../../config";
-
-
-
 
 export default function OrderSuccess() {
   const { state } = useLocation();
   const navigate = useNavigate();
-
-  // Convert props → local state so we can modify it
   const [order, setOrder] = useState(state);
-    const [confirmOpen, setConfirmOpen] = useState(false);
-const [selectedDeviceId, setSelectedDeviceId] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [selectedDeviceId, setSelectedDeviceId] = useState(null);
 
   if (!order) return <Typography>No Order Found</Typography>;
 
-
-
-
-  // ---------------------------------------------------
-  // ❌ Cancel single product and update total
-  // ---------------------------------------------------
- const handleCancelItem = async (deviceId) => {
-  const token = localStorage.getItem("UserToken");
-
-  if (!token) {
-    alert("Please login again");
-    navigate("/login");
-    return;
-  }
-
-  await api.put(
-    `/api/order/cancel-item/${order._id}/${deviceId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const handleCancelItem = async (deviceId) => {
+    const token = localStorage.getItem("UserToken");
+    if (!token) {
+      alert("Please login again");
+      navigate("/login");
+      return;
     }
-  );
 
-  const updatedItems = order.items.filter(
-    item => item.deviceId._id !== deviceId
-  );
+    await api.put(
+      `/api/order/cancel-item/${order._id}/${deviceId}`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-  setOrder({
-    ...order,
-    items: updatedItems
-  });
-};
+    const updatedItems = order.items.filter(
+      item => item.deviceId._id !== deviceId
+    );
 
-
+    setOrder({ ...order, items: updatedItems });
+  };
 
   return (
-    <Card sx={{ maxWidth: 550, margin: "20px auto", padding: "20px", textAlign: "center" }}>
+    <Card
+      sx={{
+        maxWidth: 550,
+        margin: "20px auto",
+        padding: { xs: "15px", sm: "20px" }, // 📱 Mobile view
+        textAlign: "center",
+        borderRadius: 3 // 📱 Mobile view
+      }}
+    >
       <CardContent>
-        <Typography variant="h4" color="green" fontWeight="bold">
+        <Typography variant="h4" color="green" fontWeight="bold"
+          sx={{ fontSize: { xs: "22px", sm: "32px" } }} // 📱 Mobile view
+        >
           🎉 Order Successful!
         </Typography>
 
@@ -80,7 +66,6 @@ const [selectedDeviceId, setSelectedDeviceId] = useState(null);
           Thank you for your purchase!
         </Typography>
 
-        {/* Customer Info */}
         <Box mt={3} textAlign="left">
           <Typography variant="h6">Customer Details:</Typography>
           <Typography>Name: {order.customer.fullName}</Typography>
@@ -88,7 +73,7 @@ const [selectedDeviceId, setSelectedDeviceId] = useState(null);
           <Typography>Address: {order.customer.address}</Typography>
         </Box>
 
-        {/* Order Items */}
+        {/* Items */}
         <Box mt={3} textAlign="left">
           <Typography variant="h6">Ordered Items:</Typography>
 
@@ -99,105 +84,97 @@ const [selectedDeviceId, setSelectedDeviceId] = useState(null);
           )}
 
           {order.items.map((item) => (
-  <Box
-    key={item.deviceId._id}
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      marginTop: "10px",
-      border: "1px solid #ccc",
-      padding: "8px",
-      borderRadius: "8px",
-      justifyContent: "space-between",
-    }}
-  >
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <img
-        src={`${API_URL}/uploads/${item.deviceId.device_image}`}
-        alt={item.deviceId.device_name}
-        style={{
-          width: "60px",
-          height: "60px",
-          marginRight: "12px",
-          borderRadius: "8px",
-        }}
-      />
+            <Box
+              key={item.deviceId._id}
+              sx={{
+                display: { xs: "block", sm: "flex" }, // 📱 Mobile view
+                alignItems: "center",
+                mt: 2,
+                border: "1px solid #ccc",
+                p: 1.5,
+                borderRadius: 2,
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src={`${API_URL}/uploads/${item.deviceId.device_image}`}
+                  alt={item.deviceId.device_name}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    marginRight: 12,
+                    borderRadius: 8,
+                  }}
+                />
 
-      <Box>
-        <Typography fontWeight="bold">
-          {item.deviceId.device_name}
-        </Typography>
-        <Typography>Qty: {item.quantity}</Typography>
-        <Typography>
-          Price: ₹{item.deviceId.device_price}
-        </Typography>
-      </Box>
-    </Box>
+                <Box>
+                  <Typography fontWeight="bold">
+                    {item.deviceId.device_name}
+                  </Typography>
+                  <Typography>Qty: {item.quantity}</Typography>
+                  <Typography>Price: ₹{item.deviceId.device_price}</Typography>
+                </Box>
+              </Box>
 
-   <Button
-  variant="outlined"
-  color="error"
-  disabled={item.shippingStatus !== "Pending"}
-  onClick={() => {
-    setSelectedDeviceId(item.deviceId._id);
-    setConfirmOpen(true);
-  }}
->
-  Cancel order
-</Button>
-    
-  </Box>
-))}
-
+              <Button
+                variant="outlined"
+                color="error"
+                disabled={item.shippingStatus !== "Pending"}
+                sx={{ mt: { xs: 1, sm: 0 } }} // 📱 Mobile view
+                onClick={() => {
+                  setSelectedDeviceId(item.deviceId._id);
+                  setConfirmOpen(true);
+                }}
+              >
+                Cancel order
+              </Button>
+            </Box>
+          ))}
         </Box>
 
-        {/* Total Price */}
         <Typography variant="h6" mt={2}>
           Total Paid: ₹{order.total}
         </Typography>
 
-        {/* Action Buttons Row */}
-        <Box display="flex" justifyContent="space-between" ml={22} mt={3}>
+        {/* Buttons */}
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }} // 📱 Mobile view
+          gap={2}
+          mt={3}
+        >
           <Button
             variant="contained"
             color="primary"
-            sx={{ width: "48%" }}
+            fullWidth // 📱 Mobile view
             onClick={() => navigate("/")}
           >
             Back to Home
           </Button>
-
-          {/* <Button
-            variant="contained"
-            color="error"
-            sx={{ width: "48%" }}
-            onClick={() => navigate("/")}
-          >
-            Cancel Order
-          </Button> */}
         </Box>
+
+        {/* Dialog */}
         <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-  <DialogTitle>Cancel Item</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-      Are you sure you want to cancel this item?
-    </DialogContentText>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setConfirmOpen(false)}>
-      No
-    </Button>
-    <Button
-      color="error"
-      onClick={async () => {
-        await handleCancelItem(selectedDeviceId);
-        setConfirmOpen(false);
-      }}
-    >
-      Yes, Cancel
-    </Button>
-  </DialogActions>
-</Dialog>
+          <DialogTitle>Cancel Item</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to cancel this item?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirmOpen(false)}>No</Button>
+            <Button
+              color="error"
+              onClick={async () => {
+                await handleCancelItem(selectedDeviceId);
+                setConfirmOpen(false);
+              }}
+            >
+              Yes, Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
 
       </CardContent>
     </Card>

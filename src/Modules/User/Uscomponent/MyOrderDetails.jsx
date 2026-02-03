@@ -1,9 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import api from '../../../api';
 import { API_URL } from "../../../config";
-
 
 import {
   Card,
@@ -25,14 +23,11 @@ export default function MyOrderDetails() {
 
   const fetchOrder = async () => {
     try {
-      const res = await api.get(
-        `/api/order/orderdetails/${orderId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
-          },
-        }
-      );
+      const res = await api.get(`/api/order/orderdetails/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
+        },
+      });
       setOrder(res.data.order);
     } catch (error) {
       console.error("Order Details Error:", error);
@@ -42,13 +37,25 @@ export default function MyOrderDetails() {
   if (!order) return null;
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" fontWeight="bold" mb={3}>
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        mt: { xs: 2, sm: 4 }, // 📱 Mobile view
+        px: 2 // 📱 Mobile view
+      }}
+    >
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        mb={3}
+        sx={{ fontSize: { xs: "22px", sm: "32px" } }} // 📱 Mobile view
+      >
         📦 Order Details
       </Typography>
 
-      <Card sx={{ p: 3, borderRadius: 3 }}>
-        <Typography color="gray" mb={2}>
+      <Card sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3 }}> {/* 📱 Mobile view */}
+        <Typography color="gray" mb={2} sx={{ fontSize: { xs: "13px", sm: "14px" } }}> {/* 📱 Mobile view */}
           Order ID: {order._id}
         </Typography>
 
@@ -58,28 +65,27 @@ export default function MyOrderDetails() {
           <Card
             key={item.deviceId._id}
             sx={{
-              display: "flex",
+              display: { xs: "block", sm: "flex" }, // 📱 Mobile view
               mb: 3,
-              p: 2,
+              p: { xs: 1.5, sm: 2 }, // 📱 Mobile view
               borderRadius: 2,
               boxShadow: 2,
             }}
           >
-            {/* PRODUCT IMAGE */}
             <CardMedia
               component="img"
               image={`${API_URL}/uploads/${item.deviceId.device_image}`}
               alt={item.deviceId.device_name}
               sx={{
-                width: 120,
-                height: 120,
+                width: { xs: "100%", sm: 120 }, // 📱 Mobile view
+                height: { xs: 180, sm: 120 }, // 📱 Mobile view
                 borderRadius: 2,
                 objectFit: "cover",
-                mr: 2,
+                mr: { xs: 0, sm: 2 }, // 📱 Mobile view
+                mb: { xs: 1, sm: 0 } // 📱 Mobile view
               }}
             />
 
-            {/* PRODUCT DETAILS */}
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" fontWeight="bold">
                 {item.deviceId.device_name}
@@ -103,6 +109,7 @@ export default function MyOrderDetails() {
                       ? "warning"
                       : "error"
                   }
+                  sx={{ mt: { xs: 1, sm: 0 } }} // 📱 Mobile view
                 />
               </Stack>
             </Box>
@@ -111,7 +118,11 @@ export default function MyOrderDetails() {
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography variant="h6" align="right">
+        <Typography
+          variant="h6"
+          align="right"
+          sx={{ fontSize: { xs: "16px", sm: "18px" } }} // 📱 Mobile view
+        >
           💰 Total Paid: <strong>₹{order.total}</strong>
         </Typography>
       </Card>

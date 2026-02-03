@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -7,48 +6,43 @@ import {
   CardMedia,
   Typography,
   Box,
-  Select,
-  MenuItem,
   Chip,
   Stack
 } from "@mui/material";
 import api from '../../../api';
 import { API_URL } from "../../../config";
 
-
-
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
   }, []);
-  const navigate = useNavigate();
+
   const fetchOrders = async () => {
     try {
-      const res = await api.get(
-        "/api/order/myorders",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
-          },
-        }
-      );
+      const res = await api.get("/api/order/myorders", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("UserToken")}`,
+        },
+      });
       setOrders(res.data.orders);
     } catch (err) {
       console.error(err);
-      if (err.response) {
-    console.error("STATUS:", err.response.status);
-    console.error("DATA:", err.response.data);
-  } else {
-    console.error("ERROR MESSAGE:", err.message);
-  }
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" mb={3}>
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        mt: { xs: 2, sm: 4 }, // 📱 Mobile view
+        px: 2 // 📱 Mobile view
+      }}
+    >
+      <Typography variant="h4" mb={3} sx={{ fontSize: { xs: "22px", sm: "32px" } }}> {/* 📱 Mobile view */}
         🧾 My Orders
       </Typography>
 
@@ -57,8 +51,8 @@ export default function MyOrders() {
       )}
 
       {orders.map((order) => (
-        <Card key={order._id} sx={{ mb: 3, p: 2 }}>
-          <Typography fontWeight="bold">
+        <Card key={order._id} sx={{ mb: 3, p: { xs: 1.5, sm: 2 }, borderRadius: 3 }}> {/* 📱 Mobile view */}
+          <Typography fontWeight="bold" sx={{ fontSize: { xs: "14px", sm: "16px" } }}> {/* 📱 Mobile view */}
             Order ID: {order._id}
           </Typography>
 
@@ -66,63 +60,54 @@ export default function MyOrders() {
             Total Paid: ₹{order.total}
           </Typography>
 
-          {/* ORDER ITEMS */}
           {order.items.map((item) => (
             <Card
               key={item.deviceId._id}
-onClick={() =>
-  navigate(`/orderdetails/${order._id}`, {
-    state: { item }
-
-  })
-}
+              onClick={() =>
+                navigate(`/orderdetails/${order._id}`, { state: { item } })
+              }
               sx={{
-                display: "flex",
+                display: { xs: "block", sm: "flex" }, // 📱 Mobile view
                 alignItems: "center",
                 mt: 2,
                 p: 1,
+                cursor: "pointer",
+                borderRadius: 2
               }}
             >
-              {/* PRODUCT IMAGE */}
               <CardMedia
                 component="img"
                 image={`${API_URL}/uploads/${item.deviceId.device_image}`}
                 alt={item.deviceId.device_name}
                 sx={{
-                  width: 90,
-                  height: 90,
+                  width: { xs: "100%", sm: 90 }, // 📱 Mobile view
+                  height: { xs: 160, sm: 90 }, // 📱 Mobile view
                   borderRadius: 2,
                   objectFit: "cover",
+                  mb: { xs: 1, sm: 0 } // 📱 Mobile view
                 }}
               />
 
-              {/* PRODUCT INFO */}
-              <CardContent sx={{ flex: 1 }}>
+              <CardContent sx={{ flex: 1, p: { xs: "8px 0", sm: "8px 16px" } }}> {/* 📱 Mobile view */}
                 <Typography fontWeight="bold">
                   {item.deviceId.device_name}
                 </Typography>
-
-                <Typography>
-                  Price: ₹{item.deviceId.device_price}
-                </Typography>
-
-                <Typography>
-                  Quantity: {item.quantity}
-                </Typography>
+                <Typography>Price: ₹{item.deviceId.device_price}</Typography>
+                <Typography>Quantity: {item.quantity}</Typography>
               </CardContent>
 
-              {/* SHIPPING STATUS */}
-              <Stack alignItems="center" mr={2}>
+              <Stack alignItems="center" mr={{ xs: 0, sm: 2 }}> {/* 📱 Mobile view */}
                 <Chip
-  label={item.shippingStatus}
-  color={
-    item.shippingStatus === "Delivered"
-      ? "success"
-      : item.shippingStatus === "Shipping"
-      ? "warning"
-      : "error"   // Pending
-  }
-/>
+                  label={item.shippingStatus}
+                  color={
+                    item.shippingStatus === "Delivered"
+                      ? "success"
+                      : item.shippingStatus === "Shipping"
+                      ? "warning"
+                      : "error"
+                  }
+                  sx={{ mt: { xs: 1, sm: 0 } }} // 📱 Mobile view
+                />
               </Stack>
             </Card>
           ))}

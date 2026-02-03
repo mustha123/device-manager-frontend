@@ -1,235 +1,118 @@
-import React from 'react'
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import React, { useState } from 'react'
+import {
+  Box, Drawer, AppBar, CssBaseline, Toolbar, List, Typography,
+  Divider, ListItem, ListItemButton, ListItemIcon, ListItemText,
+  IconButton, Button
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeviceHubIcon from '@mui/icons-material/DeviceHub';
 import DevicesOtherTwoToneIcon from '@mui/icons-material/DevicesOtherTwoTone';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
-
-
-
-
+import { useNavigate, Link } from 'react-router-dom';
 
 const drawerWidth = 260;
 
-
 export default function Clipdrawer() {
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false); // 📱 Mobile view
 
   const handleLogout = () => {
-  localStorage.removeItem("adminToken");
-  navigate("/admin/login");
-};
+    localStorage.removeItem("adminToken");
+    navigate("/admin/login");
+  };
+
+  const drawerContent = (
+    <Box sx={{ overflow: 'auto', p: 1, mt: 2 }}>
+      <List>
+        {[
+          { text: "Dashboard", icon: <GroupAddIcon />, path: "/admin/*" },
+          { text: "View Users", icon: <GroupAddIcon />, path: "/admin/viewuser" },
+          { text: "Add Device", icon: <DeviceHubIcon />, path: "/admin/addevice" },
+          { text: "View Device Details", icon: <DevicesOtherTwoToneIcon />, path: "/admin/viewdevice" },
+          { text: "Manage Delivery Status", icon: <DevicesOtherTwoToneIcon />, path: "/admin/managedeliverystatus" }
+        ].map((item) => (
+          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+            <ListItemButton
+              component={Link}
+              to={item.path}
+              onClick={() => setMobileOpen(false)} // 📱 Mobile view
+              sx={{
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                color: 'white'
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
-    <div>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        
-        {/* AppBar with gradient */}
-        <AppBar 
-          position="fixed" 
-          sx={{ 
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-            background: 'linear-gradient(135deg, #000000ff 0%, #764ba2 100%)',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-          }}
-        >
-          <Toolbar>
-            <Typography variant="h6"   style={{ fontWeight: 900 ,marginLeft:20}} noWrap component="div">
-              🎯 Admin Management
-              <Button style={{marginLeft:1000}} onClick={handleLogout} color="error" fontWeight="bold" variant="contained">
-  Logout
-</Button>
-            </Typography>
-          </Toolbar>
-          
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
 
-        </AppBar>
+      {/* AppBar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          background: 'linear-gradient(135deg, #000000ff 0%, #764ba2 100%)'
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            edge="start"
+            sx={{ mr: 2, display: { sm: 'none' } }} // 📱 Mobile view
+            onClick={() => setMobileOpen(true)}
+          >
+            <MenuIcon />
+          </IconButton>
 
-        
-        
-        {/* Drawer with styled background */}
-        <Drawer
-          variant="permanent"
-          sx={{
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 900 }}>
+            🎯 Admin Management
+          </Typography>
+
+          <Button color="error" variant="contained" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        sx={{ display: { xs: 'block', sm: 'none' } }} // 📱 Mobile view
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Desktop Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', sm: 'block' }, // 📱 Mobile view
+          width: drawerWidth,
+          [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { 
-              width: drawerWidth, 
-              boxSizing: 'border-box',
-              background: 'linear-gradient(180deg, #9bb2ddff 0%, #e9ecef 100%)',
-              borderRight: '2px solid #b49ea7ff'
-            },
-          }}
-        >
-          
-          <Toolbar />
-          <Box sx={{ overflow: 'auto', padding: 1,marginTop:2 }}>
-             <List>
-              <ListItem disablePadding sx={{ mt: 1 }}>
-                <ListItemButton  
-                  component={Link} 
-                  to='/admin/*'
-                  sx={{
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',                    color: 'white',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.3s ease'
-                    },
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(79, 172, 254, 0.3)'
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'white' }}>
-                    <GroupAddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Dashboard" />
-                </ListItemButton>
-              </ListItem>
-            </List>
+            boxSizing: 'border-box',
+            background: 'linear-gradient(180deg, #9bb2ddff 0%, #e9ecef 100%)'
+          },
+        }}
+      >
+        <Toolbar />
+        {drawerContent}
+      </Drawer>
 
-            <Divider sx={{ my: 2, borderColor: '#adb5bd' }} />
-            
-            {/* View Users */}
-            <List>
-              <ListItem disablePadding sx={{ mt: 1 }}>
-                <ListItemButton style={{marginTop:-30}} 
-                  component={Link} 
-                  to='/admin/viewuser'
-                  sx={{
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                    color: 'white',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.3s ease'
-                    },
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)'
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'white' }}>
-                    <GroupAddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="View Users" />
-                </ListItemButton>
-              </ListItem>
-            </List>
-
-            <Divider sx={{ my: 2, borderColor: '#adb5bd' }} />
-            
-            {/* Add Device */}
-            <List>
-              <ListItem disablePadding sx={{ mb: 1 }}>
-                <ListItemButton style={{marginTop:-30}}
-                  component={Link} 
-                  to='/admin/addevice'
-                  sx={{
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                    color: 'white',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.3s ease'
-                    },
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(79, 172, 254, 0.3)'
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'white' }}>
-                    <DeviceHubIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Add Device" />
-                </ListItemButton>
-              </ListItem>
-            </List>
-
-            <Divider sx={{ my: 2, borderColor: '#adb5bd' }} />
-            
-            {/* View Device Details */}
-            <List>
-              <ListItem disablePadding sx={{ mb: 1 }}>
-                <ListItemButton style={{marginTop:-30}}
-                  component={Link} 
-                  to='/admin/viewdevice'
-                  sx={{
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-                    color: 'white',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #fee140 0%, #fa709a 100%)',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.3s ease'
-                    },
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(250, 112, 154, 0.3)'
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'white',marginTop: '4px' }}>
-                    <DevicesOtherTwoToneIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="View Device Details" />
-                </ListItemButton>
-              </ListItem>
-            </List>
-            <Divider sx={{ my: 2, borderColor: '#adb5bd' }} />
-            
-            {/* Manage Delivery Status */}
-            <List>
-              <ListItem disablePadding sx={{ mb: 1 }}>
-                <ListItemButton style={{marginTop:-30}}
-                  component={Link} 
-                  to='/admin/managedeliverystatus'
-                  sx={{
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #55e769ff 0%, #fee140 100%)',
-                    color: 'white',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #fee140 0%, #44bae1ff 100%)',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.3s ease'
-                    },
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(250, 112, 154, 0.3)'
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'white',marginTop: '4px' }}>
-                    <DevicesOtherTwoToneIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Manage Delivery Status" />
-                </ListItemButton>
-              </ListItem>
-            </List>
-
-            <Divider sx={{ my: -1, borderColor: '#1a5da0ff' }} />
-          </Box>
-        </Drawer>
-        
-       
-          <Toolbar />
-         
-        
-        
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
       </Box>
-    </div>
-  )
+    </Box>
+  );
 }
