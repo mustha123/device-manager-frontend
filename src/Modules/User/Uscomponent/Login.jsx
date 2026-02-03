@@ -1,10 +1,10 @@
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useState } from 'react'
 import { Link,  useNavigate } from 'react-router-dom';
-import API from '../../../api';
+import api from '../../../api';
 
 export default function Login() {
 const[email,setEmail]=useState({
@@ -20,7 +20,7 @@ password:'',
   const handleSubmit=(e)=>{
     console.log(email)
     e.preventDefault(); 
-    axios.post('/api/user/login' ,email)
+    api.post('/api/user/login' ,email)
     .then((res)=>{
       console.log("details fetched",res.data);
       if (res.data.success) { 
