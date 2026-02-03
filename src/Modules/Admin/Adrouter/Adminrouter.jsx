@@ -1,3 +1,16 @@
+import React from 'react';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import Clipdrawer from '../Adcomponent/Clipdrawer';
+import Dashboard from '../Adcomponent/Dashboard';
+import Viewuser from '../Adcomponent/Viewuser';
+import Addproduct from '../Adcomponent/Addproduct';
+import ViewDeviceDetails from '../Adcomponent/ViewDeviceDetails';
+import UpdateDeviceDetails from '../Adcomponent/UpdateDeviceDetails';
+import AdminLogin from '../Adcomponent/Adminlogin';
+import Vieworders from '../Adcomponent/Vieworders';
+import ProtectedAdmin from './ProtectedAdmin';
+import ManageDeliveryStatus from '../Adcomponent/ManageDeliveryStatus';
+
 export default function Adminrouter() {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
