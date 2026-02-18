@@ -77,7 +77,7 @@ export default function MyOrders() {
             >
               <CardMedia
                 component="img"
-                image={`${API_URL}/uploads/${item.deviceId.device_image}`}
+               image={item.deviceId.device_image}
                 alt={item.deviceId.device_name}
                 sx={{
                   width: { xs: "100%", sm: 90 }, // 📱 Mobile view

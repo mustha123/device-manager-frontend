@@ -98,16 +98,15 @@ export default function OrderSuccess() {
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={`${API_URL}/uploads/${item.deviceId.device_image}`}
-                  alt={item.deviceId.device_name}
-                  style={{
-                    width: 60,
-                    height: 60,
-                    marginRight: 12,
-                    borderRadius: 8,
-                  }}
-                />
-
+src={`${API_URL}/uploads/${item.deviceId.device_image}`}  alt={item.deviceId.device_name}
+  style={{
+    width: 60,
+    height: 60,
+    marginRight: 12,
+    borderRadius: 8,
+    objectFit: "cover"
+  }}
+/>
                 <Box>
                   <Typography fontWeight="bold">
                     {item.deviceId.device_name}

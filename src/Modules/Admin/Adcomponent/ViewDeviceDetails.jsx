@@ -47,7 +47,7 @@ export default function ViewDeviceDetails() {
       <TableContainer
         component={Paper}
         sx={{
-          width: { xs: '100%', sm: '80%' }, // 📱 Mobile view
+          width: "82%",         ml:'250px',
           overflowX: 'auto', // 📱 Mobile view
           borderRadius: 2,
           border: '2px solid #1976d2',

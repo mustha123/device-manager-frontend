@@ -2,6 +2,7 @@ import { Box } from '@mui/system';
 import { Button, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import api from '../../../api';
 
 export default function Addproduct() {
 
@@ -26,7 +27,7 @@ export default function Addproduct() {
     const data = new FormData();
     Object.keys(device).forEach(key => data.append(key, device[key]));
 
-    axios.post('/api/device/Adddevice', data, {
+     api.post('/api/device/Adddevice', data, {
       headers: { "Content-Type": "multipart/form-data" }
     })
     .then(() => alert("Product added successfully"))

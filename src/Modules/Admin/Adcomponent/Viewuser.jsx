@@ -41,16 +41,18 @@ export default function Viewuser() {
         View Users
       </Typography>
 
-      <TableContainer
-        component={Paper}
-        sx={{
-          width: { xs: '100%', sm: '80%' }, // 📱 Mobile view
-          overflowX: 'auto', // 📱 Mobile view
-          borderRadius: 2,
-          border: '2px solid #1976d2',
-          boxShadow: '0px 4px 10px rgba(0,0,0,0.15)'
-        }}
-      >
+     <TableContainer
+  component={Paper}
+  sx={{
+    width: '82%',         // fill available space
+    ml:'250px',
+    overflowX: 'auto',
+    borderRadius: 2,
+    border: '2px solid #1976d2',
+    boxShadow: '0px 4px 10px rgba(0,0,0,0.15)'
+  }}
+>
+
         <Table sx={{ minWidth: 750 }}> {/* 📱 Mobile view */}
           <TableHead sx={{ backgroundColor: 'black' }}>
             <TableRow>

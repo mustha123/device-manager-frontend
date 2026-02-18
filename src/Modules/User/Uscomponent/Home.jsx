@@ -16,6 +16,7 @@ export default function Home() {
         alignItems: 'center',
         color: 'white',
         padding: '20px' // 📱 Mobile view
+        
       }}
     >
       <h1
@@ -25,7 +26,9 @@ export default function Home() {
           margin: 0, // 📱 Mobile view
           textDecoration: 'underline',
           textDecorationColor: 'white', // 📱 Mobile view
-          textShadow: '2px 2px 8px rgba(0,0,0,0.7)' // 📱 Mobile view (readability)
+          textShadow: '2px 2px 8px rgba(0,0,0,0.7)', // 📱 Mobile view (readability)
+          marginLeft: '-800px', // 📱 Mobile view
+          marginBottom: '550px' // 📱 Mobile view
         }}
       >
         Welcome to Home Page

@@ -36,7 +36,7 @@ export default function ManageDeliveryStatus() {
       <TableContainer
         component={Paper}
         sx={{
-          width: { xs: "100%", sm: "80%" }, // 📱 Mobile view
+          width: "82%",         ml:'250px',
           overflowX: "auto", // 📱 Mobile view (horizontal scroll)
           border: "2px solid #1976d2"
         }}
@@ -61,17 +61,30 @@ export default function ManageDeliveryStatus() {
                 <TableRow key={item._id}>
                   <TableCell>{index + 1}</TableCell>
 
-                  <TableCell>
-                    <img
-                      src={`${API_URL}/uploads/${item.deviceId.device_image}`}
-                      width={70}
-                      style={{ borderRadius: 6 }}
-                      alt="product"
-                    />
-                  </TableCell>
+                <TableCell>
+  {item?.deviceId?.device_image ? (
+    <img
+      src={`${API_URL}/uploads/${item.deviceId.device_image}`}
+      width={70}
+      style={{ borderRadius: 6 }}
+      alt="product"
+    />
+  ) : (
+    <Typography variant="caption" color="error">
+      No Image
+    </Typography>
+  )}
+</TableCell>
 
-                  <TableCell>{item.deviceId._id}</TableCell>
-                  <TableCell>{item.deviceId.device_name}</TableCell>
+
+                  <TableCell>
+  {item?.deviceId?._id || "Deleted"}
+</TableCell>
+
+<TableCell>
+  {item?.deviceId?.device_name || "Product removed"}
+</TableCell>
+
 
                   <TableCell>
                     <Select

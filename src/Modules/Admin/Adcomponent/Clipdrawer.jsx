@@ -25,7 +25,7 @@ export default function Clipdrawer() {
     <Box sx={{ overflow: 'auto', p: 1, mt: 2 }}>
       <List>
         {[
-          { text: "Dashboard", icon: <GroupAddIcon />, path: "/admin/*" },
+          { text: "Dashboard", icon: <GroupAddIcon />, path: "/admin/dashboard" },
           { text: "View Users", icon: <GroupAddIcon />, path: "/admin/viewuser" },
           { text: "Add Device", icon: <DeviceHubIcon />, path: "/admin/addevice" },
           { text: "View Device Details", icon: <DevicesOtherTwoToneIcon />, path: "/admin/viewdevice" },

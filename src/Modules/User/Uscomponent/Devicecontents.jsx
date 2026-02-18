@@ -57,8 +57,7 @@ export default function Devicecontents() {
             }}
           >
             <CardMedia
-              image={`${API_URL}/uploads/${prod.device_image}`}
-              title={prod.device_name}
+image={`${API_URL}/uploads/${prod.device_image}`}              title={prod.device_name}
               sx={{
                 height: { xs: 180, sm: 140 }, // 📱 Mobile view
                 objectFit: "cover", // 📱 Mobile view

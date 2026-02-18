@@ -42,13 +42,27 @@ export default function Header() {
   ];
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#020d16cf", py: 2 }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ display: "flex" }}>
+    <AppBar
+  position="static"
+  sx={{
+    backgroundColor: "#020d16cf",
+    py: 2,
+    width: "100%",
+  }}
+>
+  <Toolbar
+    disableGutters
+    sx={{
+      px: 0, // control side spacing manually
+      display: "flex",
+      width: "100%",
+    }}
+  >
+
 
           {/* 🔹 LEFT: Logo */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar alt="Device Logo" src={Avatar1} />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Avatar sx={{ml:'10px'}} alt="Device Logo" src={Avatar1} />
             <Typography
               variant="h6"
               sx={{
@@ -57,7 +71,7 @@ export default function Header() {
                 fontSize: { xs: "14px", sm: "18px" } // 📱 Mobile view
               }}
             >
-              DEVICE MANAGEMENT
+             <Link to="/navigate-1"><Button sx={{ color: "white", fontWeight: "bold" }}>DEVICE MANAGEMENT</Button></Link>
             </Typography>
           </Box>
 
@@ -105,16 +119,23 @@ export default function Header() {
           {/* 🔹 RIGHT SIDE */}
           <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 2 } }}> {/* 📱 Mobile view */}
 
-            <Button
-              component={Link}
-              to="/myorders"
-              sx={{
-                color: "white",
-                display: { xs: "none", sm: "inline-flex" } // 📱 Mobile view
-              }}
-            >
-              My Orders
-            </Button>
+           <Button
+  component={Link}
+  to="/myorders"
+  sx={{
+    color: "white",
+    display: { xs: "none", sm: "inline-flex" },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+    '&:focus': {
+      backgroundColor: 'transparent',
+    }
+  }}
+>
+  My Orders
+</Button>
+
 
             <IconButton component={Link} to="/carts">
               <ShoppingCartIcon sx={{ fontSize: { xs: 24, sm: 30 }, color: "white" }} /> {/* 📱 Mobile view */}
@@ -144,7 +165,6 @@ export default function Header() {
           </Box>
 
         </Toolbar>
-      </Container>
     </AppBar>
   );
 }
