@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import api from '../../../api';
-import { API_URL } from "../../../config";
 
 export default function OrderSuccess() {
   const { state } = useLocation();
@@ -50,14 +49,17 @@ export default function OrderSuccess() {
       sx={{
         maxWidth: 550,
         margin: "20px auto",
-        padding: { xs: "15px", sm: "20px" }, // 📱 Mobile view
+        padding: { xs: "15px", sm: "20px" },
         textAlign: "center",
-        borderRadius: 3 // 📱 Mobile view
+        borderRadius: 3
       }}
     >
       <CardContent>
-        <Typography variant="h4" color="green" fontWeight="bold"
-          sx={{ fontSize: { xs: "22px", sm: "32px" } }} // 📱 Mobile view
+        <Typography
+          variant="h4"
+          color="green"
+          fontWeight="bold"
+          sx={{ fontSize: { xs: "22px", sm: "32px" } }}
         >
           🎉 Order Successful!
         </Typography>
@@ -87,7 +89,7 @@ export default function OrderSuccess() {
             <Box
               key={item.deviceId._id}
               sx={{
-                display: { xs: "block", sm: "flex" }, // 📱 Mobile view
+                display: { xs: "block", sm: "flex" },
                 alignItems: "center",
                 mt: 2,
                 border: "1px solid #ccc",
@@ -97,16 +99,19 @@ export default function OrderSuccess() {
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
+                {/* ✅ FIXED IMAGE */}
                 <img
-src={`${API_URL}/uploads/${item.deviceId.device_image}`}  alt={item.deviceId.device_name}
-  style={{
-    width: 60,
-    height: 60,
-    marginRight: 12,
-    borderRadius: 8,
-    objectFit: "cover"
-  }}
-/>
+                  src={item.deviceId.device_image}
+                  alt={item.deviceId.device_name}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    marginRight: 12,
+                    borderRadius: 8,
+                    objectFit: "cover"
+                  }}
+                />
+
                 <Box>
                   <Typography fontWeight="bold">
                     {item.deviceId.device_name}
@@ -120,7 +125,7 @@ src={`${API_URL}/uploads/${item.deviceId.device_image}`}  alt={item.deviceId.dev
                 variant="outlined"
                 color="error"
                 disabled={item.shippingStatus !== "Pending"}
-                sx={{ mt: { xs: 1, sm: 0 } }} // 📱 Mobile view
+                sx={{ mt: { xs: 1, sm: 0 } }}
                 onClick={() => {
                   setSelectedDeviceId(item.deviceId._id);
                   setConfirmOpen(true);
@@ -136,17 +141,16 @@ src={`${API_URL}/uploads/${item.deviceId.device_image}`}  alt={item.deviceId.dev
           Total Paid: ₹{order.total}
         </Typography>
 
-        {/* Buttons */}
         <Box
           display="flex"
-          flexDirection={{ xs: "column", sm: "row" }} // 📱 Mobile view
+          flexDirection={{ xs: "column", sm: "row" }}
           gap={2}
           mt={3}
         >
           <Button
             variant="contained"
             color="primary"
-            fullWidth // 📱 Mobile view
+            fullWidth
             onClick={() => navigate("/")}
           >
             Back to Home

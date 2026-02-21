@@ -27,9 +27,9 @@ export default function Addproduct() {
     const data = new FormData();
     Object.keys(device).forEach(key => data.append(key, device[key]));
 
-     api.post('/api/device/Adddevice', data, {
-      headers: { "Content-Type": "multipart/form-data" }
-    })
+     api.post('/api/device/adddevice', data, 
+      { headers: { "Content-Type": "multipart/form-data" }}
+    )
     .then(() => alert("Product added successfully"))
     .catch(err => console.log(err));
   };
@@ -63,7 +63,7 @@ export default function Addproduct() {
           fullWidth
           size="small" // 📱 Mobile view
           sx={{ mb: 2 }}
-        />
+       required />
 
         <TextField
           variant='outlined'
@@ -73,7 +73,7 @@ export default function Addproduct() {
           fullWidth
           size="small" // 📱 Mobile view
           sx={{ mb: 2 }}
-        />
+       required />
 
         <TextField
           variant='outlined'
@@ -83,7 +83,7 @@ export default function Addproduct() {
           fullWidth
           size="small"
           sx={{ mb: 2 }}
-        />
+        required/>
 
         <TextField
           variant='outlined'
@@ -95,7 +95,7 @@ export default function Addproduct() {
           fullWidth
           size="small"
           sx={{ mb: 2 }}
-        />
+       required />
 
         <TextField
           variant='outlined'
@@ -107,7 +107,7 @@ export default function Addproduct() {
           fullWidth
           size="small"
           sx={{ mb: 2 }}
-        />
+        required/>
 
         <TextField
           variant='outlined'
@@ -119,7 +119,7 @@ export default function Addproduct() {
           fullWidth
           size="small"
           sx={{ mb: 3 }}
-        />
+        required />
 
         <Button
           variant='contained'

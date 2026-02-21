@@ -70,8 +70,8 @@ export default function ContentsDetails() {
       >
         <CardMedia
           component="img"
-        image={`${API_URL}/uploads/${product.device_image}`}          alt={product.device_name}
-          sx={{
+image={product.device_image}
+  alt={product.device_name}          sx={{
             height: { xs: 220, sm: 300 }, // 📱 Mobile view
             borderRadius: 2,
             objectFit: "cover", // 📱 Mobile view

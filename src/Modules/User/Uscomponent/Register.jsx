@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../../api';
-
+import { API_URL } from "../../../config";
 export default function Register() {
   const [reg, setReg] = useState({
     uname: '',

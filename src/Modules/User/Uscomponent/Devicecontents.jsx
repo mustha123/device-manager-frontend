@@ -56,8 +56,10 @@ export default function Devicecontents() {
               boxShadow: { xs: 2, sm: 3 }, // 📱 Mobile view
             }}
           >
-            <CardMedia
-image={`${API_URL}/uploads/${prod.device_image}`}              title={prod.device_name}
+           <CardMedia
+  component="img"
+  image={prod.device_image}
+  alt={prod.device_name}
               sx={{
                 height: { xs: 180, sm: 140 }, // 📱 Mobile view
                 objectFit: "cover", // 📱 Mobile view

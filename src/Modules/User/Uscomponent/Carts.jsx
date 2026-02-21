@@ -76,7 +76,7 @@ export default function Carts() {
             >
               <CardMedia
                 component="img"
-                image={`${API_URL}/uploads/${item.productId.device_image}`}
+                image={item.productId.device_image}
                 alt={item.productId.device_name}
                 sx={{
                   width: { xs: "100%", sm: 100 },
