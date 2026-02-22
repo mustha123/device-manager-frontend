@@ -19,7 +19,7 @@ export default function Home() {
         
       }}
     >
-      <h1
+      <h2
         style={{
           textAlign: 'center', // 📱 Mobile view
           fontSize: 'clamp(24px, 5vw, 48px)', // 📱 Mobile view (responsive text)
@@ -32,7 +32,7 @@ export default function Home() {
         }}
       >
         Welcome to Home Page
-      </h1>
+      </h2>
     </div>
   )
 }

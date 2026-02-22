@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import api from '../../../api';
-import { API_URL } from "../../../config";
+import api from "../../../api";
+import { useNavigate } from "react-router-dom";
 
 import {
   Card,
@@ -12,10 +12,10 @@ import {
   Box,
   Stack
 } from "@mui/material";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useNavigate } from "react-router-dom";
 
 export default function Carts() {
   const [cart, setCart] = useState(null);
@@ -35,6 +35,8 @@ export default function Carts() {
   };
 
   const updateQty = (productId, quantity) => {
+    if (quantity < 1) return;
+
     api
       .put(
         "/api/cart/update",
@@ -55,104 +57,134 @@ export default function Carts() {
   const handleCheckout = () => {
     navigate("/checkout", { state: { cart } });
   };
-    if (!cart) return <Typography sx={{ p: 3 }}>Loading...</Typography>;
 
+  // 🔥 Loading state
+  if (!cart) {
+    return (
+      <Typography sx={{ p: 3, textAlign: "center" }}>
+        Loading...
+      </Typography>
+    );
+  }
 
   return (
-    <Box sx={{ padding: "20px", paddingBottom: { xs: "20px", sm: "20px" } }}>
+    <Box sx={{ padding: "20px" }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         🛒 Your Cart
       </Typography>
 
-      {cart?.items?.length > 0 ? (
+      {/* 🔥 Empty cart */}
+      {cart?.items?.length === 0 ? (
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+          Your cart is empty.
+        </Typography>
+      ) : (
         <>
-          {cart.items.map((item) => (
-            <Card
-              key={item.productId._id}
-              sx={{
-                display: { xs: "block", sm: "flex" }, // mobile stack
-                alignItems: "center",
-                margin: "10px 0",
-                padding: "10px",
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={item.productId.device_image}
-                alt={item.productId.device_name}
-                sx={{
-                  width: { xs: "100%", sm: 100 },
-                  height: { xs: 180, sm: 100 },
-                  borderRadius: 2,
-                  objectFit: "cover",
-                  marginBottom: { xs: 1, sm: 0 },
-                }}
-              />
+          {/* 🔥 Cart items */}
+          {cart?.items?.map((item) => {
+            // Prevent crash if product deleted in DB
+            if (!item?.productId) {
+              return (
+                <Typography key={item._id} color="error" sx={{ mt: 2 }}>
+                  Product removed from store
+                </Typography>
+              );
+            }
 
-              <CardContent
+            return (
+              <Card
+                key={item.productId._id}
                 sx={{
-                  flexGrow: 1,
-                  padding: { xs: "8px 0", sm: "0 16px" },
+                  display: { xs: "block", sm: "flex" },
+                  alignItems: "center",
+                  margin: "10px 0",
+                  padding: "10px",
                 }}
               >
-                <Typography variant="h6" noWrap>
-                  {item.productId.device_name}
-                </Typography>
+                {/* IMAGE */}
+                <CardMedia
+                  component="img"
+                  image={
+                    item.productId?.device_image ||
+                    "https://via.placeholder.com/200"
+                  }
+                  alt={item.productId?.device_name}
+                  sx={{
+                    width: { xs: "100%", sm: 100 },
+                    height: { xs: 180, sm: 100 },
+                    borderRadius: 2,
+                    objectFit: "cover",
+                    marginBottom: { xs: 1, sm: 0 },
+                  }}
+                />
 
-                <Typography variant="body2" color="text.secondary">
-                  Unit Price: ₹{item.price}
-                </Typography>
-
-                <Typography variant="body1" fontWeight="bold" color="green">
-                  Subtotal: ₹{item.quantity * item.price}
-                </Typography>
-
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  mt={1}
-                  justifyContent={{ xs: "space-between", sm: "flex-start" }}
+                {/* DETAILS */}
+                <CardContent
+                  sx={{
+                    flexGrow: 1,
+                    padding: { xs: "8px 0", sm: "0 16px" },
+                  }}
                 >
-                  <IconButton
-                    size="large"
-                    onClick={() =>
-                      updateQty(item.productId._id, item.quantity - 1)
-                    }
-                    disabled={item.quantity <= 1}
+                  <Typography variant="h6" noWrap>
+                    {item.productId?.device_name}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary">
+                    Unit Price: ₹{item.price}
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    color="green"
                   >
-                    <RemoveIcon />
-                  </IconButton>
+                    Subtotal: ₹{item.quantity * item.price}
+                  </Typography>
 
-                  <Typography>{item.quantity}</Typography>
-
-                  <IconButton
-                    size="large"
-                    onClick={() =>
-                      updateQty(item.productId._id, item.quantity + 1)
-                    }
+                  {/* QUANTITY */}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    mt={1}
                   >
-                    <AddIcon />
-                  </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        updateQty(item.productId._id, item.quantity - 1)
+                      }
+                      disabled={item.quantity <= 1}
+                    >
+                      <RemoveIcon />
+                    </IconButton>
 
-                  <IconButton
-                    size="large"
-                    color="error"
-                    onClick={() => deleteItem(item.productId._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Stack>
-              </CardContent>
-            </Card>
-          ))}
+                    <Typography>{item.quantity}</Typography>
 
+                    <IconButton
+                      onClick={() =>
+                        updateQty(item.productId._id, item.quantity + 1)
+                      }
+                    >
+                      <AddIcon />
+                    </IconButton>
+
+                    <IconButton
+                      color="error"
+                      onClick={() => deleteItem(item.productId._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
+                </CardContent>
+              </Card>
+            );
+          })}
+
+          {/* 🔥 Total */}
           <Box
             sx={{
               padding: "20px",
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center",
               borderTop: "1px solid #ccc",
               marginTop: "20px",
             }}
@@ -163,19 +195,16 @@ export default function Carts() {
             </Typography>
           </Box>
 
+          {/* 🔥 Checkout */}
           <Button
             variant="contained"
             fullWidth
-            sx={{ marginTop: "15px", background: "#ef1027ff" }}
+            sx={{ mt: 2, background: "#ef1027" }}
             onClick={handleCheckout}
           >
             Checkout
           </Button>
         </>
-      ) : (
-        <Typography variant="h6" color="gray">
-          Your cart is empty 🛍️
-        </Typography>
       )}
     </Box>
   );
