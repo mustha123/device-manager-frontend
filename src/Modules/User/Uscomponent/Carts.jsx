@@ -55,6 +55,8 @@ export default function Carts() {
   const handleCheckout = () => {
     navigate("/checkout", { state: { cart } });
   };
+    if (!cart) return <Typography sx={{ p: 3 }}>Loading...</Typography>;
+
 
   return (
     <Box sx={{ padding: "20px", paddingBottom: { xs: "20px", sm: "20px" } }}>

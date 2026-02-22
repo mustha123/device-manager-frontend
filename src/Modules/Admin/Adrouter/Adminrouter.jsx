@@ -22,7 +22,7 @@ export default function Adminrouter() {
 
       <Routes>
         {/* Redirect /admin → /admin/login */}
-        <Route path="/" element={<Navigate to="login" replace />} />
+        <Route path="/" element={<Navigate to="dashboard" replace />} />
 
         {/* Login page */}
         <Route path="/login" element={<AdminLogin />} />

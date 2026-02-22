@@ -78,9 +78,8 @@ export default function ViewDeviceDetails() {
 
                 <TableCell>
                   <img
-                    src={`${API_URL}/uploads/${prod.device_image}`}
-                    alt="device"
-                    style={{ width: 70, borderRadius: 5 }}
+                  src={prod.device_image}
+                  alt={prod.device_name}     style={{ width: 70, borderRadius: 5 }}
                   />
                 </TableCell>
 

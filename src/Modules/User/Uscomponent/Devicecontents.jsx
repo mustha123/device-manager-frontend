@@ -32,6 +32,8 @@ export default function Devicecontents() {
     localStorage.setItem("cart", JSON.stringify(cartItems));
     navigate("/carts", { state: { cartItems } });
   };
+    if (!products.length) return <Typography sx={{ p: 3 }}>Loading...</Typography>;
+
 
   return (
     <div style={{ padding: "55px" }}>

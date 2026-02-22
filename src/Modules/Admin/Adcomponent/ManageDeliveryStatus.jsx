@@ -64,10 +64,10 @@ export default function ManageDeliveryStatus() {
                 <TableCell>
   {item?.deviceId?.device_image ? (
     <img
-      src={`${API_URL}/uploads/${item.deviceId.device_image}`}
-      width={70}
+  src={item?.deviceId?.device_image}
+  alt={item?.deviceId?.device_name}      width={70}
       style={{ borderRadius: 6 }}
-      alt="product"
+    
     />
   ) : (
     <Typography variant="caption" color="error">
