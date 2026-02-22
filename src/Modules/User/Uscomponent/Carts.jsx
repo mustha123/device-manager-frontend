@@ -10,7 +10,7 @@ import {
   Typography,
   IconButton,
   Box,
-  Stack
+  Stack,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -58,7 +58,7 @@ export default function Carts() {
     navigate("/checkout", { state: { cart } });
   };
 
-  // 🔥 Loading state
+  // 🔥 Loading
   if (!cart) {
     return (
       <Typography sx={{ p: 3, textAlign: "center" }}>
@@ -67,119 +67,112 @@ export default function Carts() {
     );
   }
 
+  /* 🔥 FILTER VALID ITEMS */
+  const validItems = cart?.items?.filter((item) => item?.productId) || [];
+
+  /* 🔥 REMOVED PRODUCTS */
+  const removedItems = cart?.items?.filter((item) => !item?.productId) || [];
+
+  /* 🔥 CALCULATE TOTAL */
+  const total = validItems.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
+
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         🛒 Your Cart
       </Typography>
 
+      {/* 🔥 Show removed message only once */}
+      {removedItems.length > 0 && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          Some products were removed from the store.
+        </Typography>
+      )}
+
       {/* 🔥 Empty cart */}
-      {cart?.items?.length === 0 ? (
+      {validItems.length === 0 ? (
         <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
           Your cart is empty.
         </Typography>
       ) : (
         <>
-          {/* 🔥 Cart items */}
-          {cart?.items?.map((item) => {
-            // Prevent crash if product deleted in DB
-            if (!item?.productId) {
-              return (
-                <Typography key={item._id} color="error" sx={{ mt: 2 }}>
-                  Product removed from store
-                </Typography>
-              );
-            }
-
-            return (
-              <Card
-                key={item.productId._id}
+          {/* 🔥 Cart Items */}
+          {validItems.map((item) => (
+            <Card
+              key={item.productId._id}
+              sx={{
+                display: { xs: "block", sm: "flex" },
+                alignItems: "center",
+                margin: "10px 0",
+                padding: "10px",
+              }}
+            >
+              {/* IMAGE */}
+              <CardMedia
+                component="img"
+                image={
+                  item.productId?.device_image ||
+                  "https://via.placeholder.com/200"
+                }
+                alt={item.productId?.device_name}
                 sx={{
-                  display: { xs: "block", sm: "flex" },
-                  alignItems: "center",
-                  margin: "10px 0",
-                  padding: "10px",
+                  width: { xs: "100%", sm: 100 },
+                  height: { xs: 180, sm: 100 },
+                  borderRadius: 2,
+                  objectFit: "cover",
                 }}
-              >
-                {/* IMAGE */}
-                <CardMedia
-                  component="img"
-                  image={
-                    item.productId?.device_image ||
-                    "https://via.placeholder.com/200"
-                  }
-                  alt={item.productId?.device_name}
-                  sx={{
-                    width: { xs: "100%", sm: 100 },
-                    height: { xs: 180, sm: 100 },
-                    borderRadius: 2,
-                    objectFit: "cover",
-                    marginBottom: { xs: 1, sm: 0 },
-                  }}
-                />
+              />
 
-                {/* DETAILS */}
-                <CardContent
-                  sx={{
-                    flexGrow: 1,
-                    padding: { xs: "8px 0", sm: "0 16px" },
-                  }}
-                >
-                  <Typography variant="h6" noWrap>
-                    {item.productId?.device_name}
-                  </Typography>
+              {/* DETAILS */}
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">
+                  {item.productId?.device_name}
+                </Typography>
 
-                  <Typography variant="body2" color="text.secondary">
-                    Unit Price: ₹{item.price}
-                  </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Unit Price: ₹{item.price}
+                </Typography>
 
-                  <Typography
-                    variant="body1"
-                    fontWeight="bold"
-                    color="green"
+                <Typography variant="body1" fontWeight="bold" color="green">
+                  Subtotal: ₹{item.quantity * item.price}
+                </Typography>
+
+                {/* QUANTITY */}
+                <Stack direction="row" alignItems="center" spacing={1} mt={1}>
+                  <IconButton
+                    onClick={() =>
+                      updateQty(item.productId._id, item.quantity - 1)
+                    }
+                    disabled={item.quantity <= 1}
                   >
-                    Subtotal: ₹{item.quantity * item.price}
-                  </Typography>
+                    <RemoveIcon />
+                  </IconButton>
 
-                  {/* QUANTITY */}
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={1}
-                    mt={1}
+                  <Typography>{item.quantity}</Typography>
+
+                  <IconButton
+                    onClick={() =>
+                      updateQty(item.productId._id, item.quantity + 1)
+                    }
                   >
-                    <IconButton
-                      onClick={() =>
-                        updateQty(item.productId._id, item.quantity - 1)
-                      }
-                      disabled={item.quantity <= 1}
-                    >
-                      <RemoveIcon />
-                    </IconButton>
+                    <AddIcon />
+                  </IconButton>
 
-                    <Typography>{item.quantity}</Typography>
+                  <IconButton
+                    color="error"
+                    onClick={() => deleteItem(item.productId._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Stack>
+              </CardContent>
+            </Card>
+          ))}
 
-                    <IconButton
-                      onClick={() =>
-                        updateQty(item.productId._id, item.quantity + 1)
-                      }
-                    >
-                      <AddIcon />
-                    </IconButton>
-
-                    <IconButton
-                      color="error"
-                      onClick={() => deleteItem(item.productId._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Stack>
-                </CardContent>
-              </Card>
-            );
-          })}
-
-          {/* 🔥 Total */}
+          {/* 🔥 TOTAL */}
           <Box
             sx={{
               padding: "20px",
@@ -191,11 +184,11 @@ export default function Carts() {
           >
             <Typography variant="h6">Total:</Typography>
             <Typography variant="h5" fontWeight="bold">
-              ₹{cart?.totalPrice || 0}
+              ₹{total}
             </Typography>
           </Box>
 
-          {/* 🔥 Checkout */}
+          {/* 🔥 CHECKOUT */}
           <Button
             variant="contained"
             fullWidth
