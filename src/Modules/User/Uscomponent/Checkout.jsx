@@ -35,6 +35,11 @@ export default function Checkout() {
       return;
     }
 
+     const totalPrice = cart.items.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
+
     try {
       const res = await api.post(
         "/api/order/create",
@@ -45,7 +50,7 @@ export default function Checkout() {
             address: details.address,
           },
           items: cart.items,
-          total: cart.totalPrice,
+          total:totalPrice,
         },
         {
           headers: {
