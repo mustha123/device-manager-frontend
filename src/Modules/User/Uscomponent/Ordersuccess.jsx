@@ -34,7 +34,7 @@ export default function OrderSuccess() {
     await api.put(
       `/api/order/cancel-item/${order._id}/${deviceId}`,
       {},
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: {  Authorization: `Bearer ${localStorage.getItem("UserToken")}` } }
     );
 
     const updatedItems = order.items.filter(

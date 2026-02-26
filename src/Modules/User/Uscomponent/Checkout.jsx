@@ -35,10 +35,7 @@ export default function Checkout() {
       return;
     }
 
-     const totalPrice = cart.items.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
+  
 
     try {
       const res = await api.post(
@@ -67,9 +64,14 @@ export default function Checkout() {
   };
 
   if (!cart || !cart.items || cart.items.length === 0) {
-    alert("Cart is empty");
-    return null;
-  }
+  alert("Cart is empty");
+  return null;
+}
+
+const totalPrice = cart.items.reduce(
+  (acc, item) => acc + item.quantity * item.price,
+  0
+);
 
   return (
     <Card
@@ -92,9 +94,9 @@ export default function Checkout() {
         <Typography variant="h6">
           Total Items: {cart.items.length}
         </Typography>
-        <Typography variant="h6" mt={1}>
-          Total Price: ₹{cart.totalPrice}
-        </Typography>
+       <Typography variant="h6" mt={1}>
+  Total Price: ₹{totalPrice}
+</Typography>
 
         <Box mt={3}>
           <TextField

@@ -41,7 +41,7 @@ export default function Carts() {
       .put(
         "/api/cart/update",
         { productId, quantity },
-        { headers: { Authorization: localStorage.getItem("UserToken") } }
+        { headers: {  Authorization: `Bearer ${localStorage.getItem("UserToken")}` } }
       )
       .then(() => fetchCart());
   };
@@ -49,7 +49,7 @@ export default function Carts() {
   const deleteItem = (productId) => {
     api
       .delete(`/api/cart/delete/${productId}`, {
-        headers: { Authorization: localStorage.getItem("UserToken") },
+        headers: { Authorization: `Bearer ${localStorage.getItem("UserToken")}` },
       })
       .then(() => fetchCart());
   };

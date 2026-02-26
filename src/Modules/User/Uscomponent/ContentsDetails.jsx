@@ -40,7 +40,7 @@ export default function ContentsDetails() {
           productId: product._id,
           price: product.device_price
         },
-        { headers: { Authorization: token } }
+        { headers: {  Authorization: `Bearer ${localStorage.getItem("UserToken")}` } }
       );
 
       alert("Product added to cart!");
