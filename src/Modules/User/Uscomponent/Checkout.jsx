@@ -55,7 +55,7 @@ export default function Checkout() {
           },
         }
       );
-
+      alert("Order placed successfully");
       navigate("/ordersuccess", { state: res.data.order });
     } catch (error) {
       console.error("Order error:", error.response?.data);

@@ -86,11 +86,11 @@ export default function Carts() {
       </Typography>
 
       {/* 🔥 Show removed message only once */}
-      {removedItems.length > 0 && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          Some products were removed from the store.
-        </Typography>
-      )}
+      {removedItems.length > 0}
+      {/* //   <Typography color="error" sx={{ mb: 2 }}>
+      //     Some products were removed from the store.
+      //   </Typography>
+      // )} */}
 
       {/* 🔥 Empty cart */}
       {validItems.length === 0 ? (
